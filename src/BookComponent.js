@@ -31,7 +31,7 @@ class BookComponent extends Component {
                         </select>
                     </div>
                 </div>
-                <div className="book-title">{ title}</div>
+                <div className="book-title">{ title }</div>
                 <div className="book-authors">{ authors.join(", ") }</div>
             </div>
         </li>)
