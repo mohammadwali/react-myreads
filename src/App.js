@@ -31,28 +31,28 @@ class BooksApp extends React.Component {
         //checking if the selected shelf exsits
         if (this.state.shelves[selectedShelf]) {
 
+            //updating UI and BACKEND in parallel
+
+            this.setState((previousState) => {
+
+                let newShelves = {...previousState.shelves};
+
+                //removing the book from previous shelf
+                let bookIndex = newShelves[book.shelf].indexOf(book);
+                newShelves[book.shelf].splice(bookIndex, 1);
+
+                //adding book to new shelf
+                newShelves[selectedShelf].push(book);
+
+
+                return {
+                    shelves: newShelves
+                }
+            });
+
+
             BooksAPI
                 .update(book, selectedShelf)
-                .then(() => {
-
-                    this.setState((previousState) => {
-
-                        let newShelves = {...previousState.shelves};
-
-                        //removing the book from previous shelf
-                        let bookIndex = newShelves[book.shelf].indexOf(book);
-                        newShelves[book.shelf].splice(bookIndex, 1);
-
-                        //adding book to new shelf
-                        newShelves[selectedShelf].push(book);
-
-
-                        return {
-                            shelves: newShelves
-                        }
-                    })
-                })
-
         }
 
     }
