@@ -28,33 +28,34 @@ class BooksApp extends React.Component {
     onShelfChange(event, book) {
         const selectedShelf = event.target.value;
 
-        //checking if the selected shelf exsits
-        if (this.state.shelves[selectedShelf]) {
 
-            //updating UI and BACKEND in parallel
+        //updating UI and BACKEND in parallel
 
-            this.setState((previousState) => {
+        this.setState((previousState) => {
 
-                let newShelves = {...previousState.shelves};
+            let newShelves = {...previousState.shelves};
 
-                //removing the book from previous shelf
-                let bookIndex = newShelves[book.shelf].indexOf(book);
-                newShelves[book.shelf].splice(bookIndex, 1);
+            //removing the book from previous shelf
+            let bookIndex = newShelves[book.shelf].indexOf(book);
+            newShelves[book.shelf].splice(bookIndex, 1);
+
+
+            //checking if the selected shelf exsits
+            if (this.state.shelves[selectedShelf]) {
 
                 //adding book to new shelf
                 newShelves[selectedShelf].push(book);
 
+            }
 
-                return {
-                    shelves: newShelves
-                }
-            });
+            return {
+                shelves: newShelves
+            }
+        });
 
 
-            BooksAPI
-                .update(book, selectedShelf)
-        }
-
+        BooksAPI
+            .update(book, selectedShelf)
     }
 
     render() {
