@@ -18,11 +18,43 @@ class BooksApp extends React.Component {
             wantToRead: [],
             currentlyReading: []
         }
-    }
+    };
 
     componentDidMount() {
         BooksAPI.getAll()
             .then((books) => this.setState({shelves: groupBy(books, "shelf")}))
+    }
+
+    onShelfChange(event, book) {
+        const selectedShelf = event.target.value;
+
+        //checking if the selected shelf exsits
+        if (this.state.shelves[selectedShelf]) {
+
+            BooksAPI
+                .update(book, selectedShelf)
+                .then(() => {
+
+                    this.setState((previousState) => {
+
+                        let newShelves = {...previousState.shelves};
+
+                        //removing the book from previous shelf
+                        let bookIndex = newShelves[book.shelf].indexOf(book);
+                        newShelves[book.shelf].splice(bookIndex, 1);
+
+                        //adding book to new shelf
+                        newShelves[selectedShelf].push(book);
+
+
+                        return {
+                            shelves: newShelves
+                        }
+                    })
+                })
+
+        }
+
     }
 
     render() {
@@ -56,9 +88,12 @@ class BooksApp extends React.Component {
                         </div>
                         <div className="list-books-content">
                             <div>
-                                <BookShelf title="Read" books={this.state.shelves.read}/>
-                                <BookShelf title="Want to read" books={this.state.shelves.wantToRead}/>
-                                <BookShelf title="Currently reading" books={this.state.shelves.currentlyReading}/>
+                                <BookShelf title="Read" onShelfChange={this.onShelfChange.bind(this)}
+                                           books={this.state.shelves.read}/>
+                                <BookShelf title="Want to read" onShelfChange={this.onShelfChange.bind(this)}
+                                           books={this.state.shelves.wantToRead}/>
+                                <BookShelf title="Currently reading" onShelfChange={this.onShelfChange.bind(this)}
+                                           books={this.state.shelves.currentlyReading}/>
                             </div>
                         </div>
                         <div className="open-search">
