@@ -45,6 +45,8 @@ class BooksApp extends React.Component {
             //checking if the selected shelf exsits
             if (this.state.shelves[selectedShelf]) {
 
+                book.shelf = selectedShelf;
+
                 //adding book to new shelf
                 newShelves[selectedShelf].push(book);
 
