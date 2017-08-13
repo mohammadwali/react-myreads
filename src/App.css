@@ -199,3 +199,7 @@ body, .app {
     background-image: url('./icons/task.png');
     background-size: 124%;
 }
+.bookshelf-books > h1 {
+    color: #dcdbdb;
+    padding: 2.5em 0;
+}

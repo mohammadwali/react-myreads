@@ -18,7 +18,7 @@ class BookShelf extends Component {
             <div className="bookshelf">
                 <h2 className="bookshelf-title">{ title }</h2>
                 <div className="bookshelf-books">
-                    <ol className="books-grid">
+                    { books.length ? ( <ol className="books-grid">
 
                         {
                             books.map((book) => {
@@ -30,7 +30,9 @@ class BookShelf extends Component {
                             })
                         }
 
-                    </ol>
+                    </ol> ) : (<h1> No books left in this shelf. </h1>) }
+
+
                 </div>
             </div>
         )
