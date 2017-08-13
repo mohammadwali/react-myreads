@@ -6,12 +6,16 @@ class BookComponent extends Component {
 
     static propTypes = {
         book: PropTypes.object.isRequired,
-        onShelfChange: PropTypes.func.isRequired
+        onShelfChange: PropTypes.func.isRequired,
+        highlight: PropTypes.bool
     };
 
     render() {
-        const {onShelfChange, book} = this.props;
-        const {title, authors, shelf, imageLinks: {thumbnail}} = book;
+        const {onShelfChange, book, highlight} = this.props;
+        const {title, authors} = book;
+        const thumbnail = book.imageLinks ? book.imageLinks.thumbnail : "";
+
+        let shelf = (book.shelf ? book.shelf : "none");
 
         return (<li>
             <div className="book">
@@ -21,8 +25,8 @@ class BookComponent extends Component {
                         height: 188,
                         backgroundImage: 'url(' + thumbnail + ')'
                     }}/>
-                    <div className="book-shelf-changer">
-                        <select value={shelf} onChange={(event) => onShelfChange(event, book)}>
+                    <div className={ "book-shelf-changer" + ( highlight ? " mine" : "" ) }>
+                        <select value={shelf} onChange={(event) => onShelfChange(event.target.value, book)}>
                             <option value="none" disabled>Move to...</option>
                             <option value="currentlyReading">Currently Reading</option>
                             <option value="wantToRead">Want to Read</option>
@@ -32,7 +36,7 @@ class BookComponent extends Component {
                     </div>
                 </div>
                 <div className="book-title">{ title }</div>
-                <div className="book-authors">{ authors.join(", ") }</div>
+                <div className="book-authors">{ authors && authors.join(", ") }</div>
             </div>
         </li>)
     };
