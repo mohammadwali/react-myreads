@@ -17,7 +17,23 @@ class BooksApp extends React.Component {
 
     componentDidMount() {
         BooksAPI.getAll()
-            .then((books) => this.setState({shelves: groupBy(books, "shelf")}))
+            .then((books) => this.setState(() => {
+
+                //not directly assigning group as it will not add the shelf
+                // which does not have results
+                let group = groupBy(books, "shelf");
+
+                // so here we are making sure that if we don't have any results
+                // for the current shelf add empty array there at least
+                return {
+                    shelves: {
+                        read: group.read || [],
+                        wantToRead: group.wantToRead || [],
+                        currentlyReading: group.currentlyReading || []
+                    }
+                };
+
+            }))
     }
 
     getMyBooks() {
