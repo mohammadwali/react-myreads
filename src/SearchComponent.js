@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom'
 import PropTypes from 'prop-types';
-import {debounce, find, isEmpty} from 'underscore';
+import {debounce, find, isEmpty, isArray} from 'underscore';
 import BookComponent from './BookComponent';
 
 import * as BooksAPI from './BooksAPI'
@@ -40,20 +40,27 @@ class SearchComponent extends Component {
 
         BooksAPI
             .search(query)
-            .then((books) => this.setState((previousState) => {
-                let updatedBooks = books.map((book) => {
-                    let mineBook = find(this.props.myBooks, {id: book.id});
+            .then((books) => {
 
-                    if (mineBook) {
-                        book.shelf = mineBook.shelf;
-                    }
+                if (isArray(books) && books.length) {
+                    this.setState((previousState) => {
+                        let updatedBooks = books.map((book) => {
+                            let mineBook = find(this.props.myBooks, {id: book.id});
 
-                    return book;
-                });
+                            if (mineBook) {
+                                book.shelf = mineBook.shelf;
+                            }
+
+                            return book;
+                        });
 
 
-                return {searchedBooks: updatedBooks};
-            }));
+                        return {searchedBooks: updatedBooks};
+                    })
+                }
+
+
+            });
 
 
     }, 200);
