@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {isUndefined} from 'underscore'
 
 
 class BookComponent extends Component {
@@ -11,11 +12,12 @@ class BookComponent extends Component {
     };
 
     render() {
-        const {onShelfChange, book, highlight} = this.props;
+        const {onShelfChange, book} = this.props;
         const {title, authors} = book;
         const thumbnail = book.imageLinks ? book.imageLinks.thumbnail : "";
 
         let shelf = (book.shelf ? book.shelf : "none");
+        let highlight = (isUndefined(this.props.highlight) ? true : this.props.highlight);
 
         return (<li>
             <div className="book">
@@ -27,7 +29,7 @@ class BookComponent extends Component {
                     }}/>
                     <div className={ "book-shelf-changer" + ( highlight ? " mine" : "" ) }>
                         <select value={shelf} onChange={(event) => onShelfChange(event.target.value, book)}>
-                            <option value="none" disabled>Move to...</option>
+                            <option value="none" disabled> { highlight ? "Move to" : "Add to"}...</option>
                             <option value="currentlyReading">Currently Reading</option>
                             <option value="wantToRead">Want to Read</option>
                             <option value="read">Read</option>

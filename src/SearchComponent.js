@@ -40,7 +40,21 @@ class SearchComponent extends Component {
 
         BooksAPI
             .search(query)
-            .then((books) => this.setState({searchedBooks: books}));
+            .then((books) => this.setState((previousState) => {
+                let updatedBooks = books.map((book) => {
+                    let mineBook = find(this.props.myBooks, {id: book.id});
+
+                    if (mineBook) {
+                        book.shelf = mineBook.shelf;
+                    }
+
+                    return book;
+                });
+
+
+                return {searchedBooks: updatedBooks};
+            }));
+
 
     }, 200);
 
