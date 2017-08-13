@@ -7,7 +7,7 @@ class BookShelf extends Component {
 
     static propTypes = {
         title: PropTypes.string.isRequired,
-        books: PropTypes.array.isRequired,
+        books: PropTypes.array,
         onShelfChange: PropTypes.func.isRequired
     };
 
@@ -18,7 +18,7 @@ class BookShelf extends Component {
             <div className="bookshelf">
                 <h2 className="bookshelf-title">{ title }</h2>
                 <div className="bookshelf-books">
-                    { books.length ? ( <ol className="books-grid">
+                    { books && books.length ? ( <ol className="books-grid">
 
                         {
                             books.map((book) => {

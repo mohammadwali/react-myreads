@@ -199,7 +199,42 @@ body, .app {
     background-image: url('./icons/task.png');
     background-size: 124%;
 }
+
 .bookshelf-books > h1 {
-    color: #dcdbdb;
     padding: 2.5em 0;
+}
+
+.initial-state, .bookshelf-books > h1 {
+    color: #dcdbdb;
+}
+
+.loading-block {
+    padding: 50px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-block-search {
+    height: 82vh;
+}
+
+.loader {
+    width: 60px;
+    height: 60px;
+    background: url('./icons/spinner.gif') no-repeat center;
+    background-size: 100%;
+}
+
+.loader-lg {
+    width: 100px;
+    height: 100px;
+}
+
+.search-icon{
+    width: 150px;
+    height: 150px;
+    background: url('./icons/search.png') no-repeat center;
+    background-size: 100%;
 }

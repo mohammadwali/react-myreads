@@ -16,7 +16,10 @@ class SearchComponent extends Component {
 
     state = {
         searchQuery: '',
-        searchedBooks: []
+        searchedBooks: [],
+        noResults: false,
+        isLoading: false,
+        isInitial: true
     };
 
 
@@ -34,9 +37,20 @@ class SearchComponent extends Component {
         if (!isEmpty(query)) {
             this.searchBooks(query);
         }
+        else {
+
+            this.setState({
+                isInitial: true
+            });
+        }
     }
 
     searchBooks = debounce((query) => {
+
+        this.setState({
+            isLoading: true,
+            isInitial: false
+        });
 
         BooksAPI
             .search(query)
@@ -55,15 +69,27 @@ class SearchComponent extends Component {
                         });
 
 
-                        return {searchedBooks: updatedBooks};
+                        return {
+                            searchedBooks: updatedBooks,
+                            noResults: false,
+                            isLoading: false
+                        };
                     })
-                }
+                } else {
 
+
+                    this.setState({
+                        noResults: true,
+                        isLoading: false
+                    })
+
+
+                }
 
             });
 
 
-    }, 200);
+    }, 500);
 
 
     isMine(bookId) {
@@ -71,7 +97,7 @@ class SearchComponent extends Component {
     }
 
     render() {
-        const {searchQuery: query, searchedBooks: books} = this.state;
+        const {searchQuery: query, searchedBooks: books, isInitial, noResults, isLoading} = this.state;
         const {onShelfChange} = this.props;
 
         return (
@@ -87,21 +113,44 @@ class SearchComponent extends Component {
                     </div>
                 </div>
                 <div className="search-books-results">
-                    <ol className="books-grid">
+                    { isInitial ?
+                        (
+                            <div className="loading-block-search loading-block">
+                                <div className="search-icon"/>
+                                <h1 className="initial-state"> Type something to start search! </h1>
+                            </div>
+                        ) : ( isLoading ? (
 
-                        {
-                            books.map((book) => {
+                            <div className="loading-block-search loading-block">
+                                <div className="loader"/>
+                            </div>
 
-                                return (
-                                    <BookComponent key={book.id} book={book}
-                                                   onShelfChange={onShelfChange}
-                                                   highlight={this.isMine(book.id)}/>
-                                )
+                        ) : ( noResults ? (
 
-                            })
-                        }
+                                <div className="loading-block-search loading-block">
+                                    <div className="search-icon"/>
+                                    <h1 className="initial-state"> No results found for your query. </h1>
+                                </div>
 
-                    </ol>
+                            ) : (
+                                <ol className="books-grid">
+
+                                    {
+                                        books.map((book) => {
+
+                                            return (
+                                                <BookComponent key={book.id} book={book}
+                                                               onShelfChange={onShelfChange}
+                                                               highlight={this.isMine(book.id)}/>
+                                            )
+
+                                        })
+                                    }
+
+                                </ol>
+                            )
+                        ))
+                    }
                 </div>
             </div>
         )
